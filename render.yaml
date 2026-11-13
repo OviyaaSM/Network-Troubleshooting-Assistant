@@ -1,0 +1,16 @@
+services:
+  # Frontend Static Site on Render
+  - type: web
+    name: network-troubleshooting-assistant-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    routes:
+      # SPA rewrite rule for React client-side routing
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+        # Point to deployed Vercel backend URL (e.g. https://network-troubleshooting-assistant.vercel.app)
