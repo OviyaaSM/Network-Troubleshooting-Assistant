@@ -609,6 +609,6 @@ npm test
 ---
 
 ## Author & Acknowledgements
-- **Author:** Senior Engineering Team
+- **Author:** Oviyaa SM
 - **Course:** Computer Networks & Formal Languages and Automata Theory (FLAT)
 - **Repository:** [OviyaaSM/Network-Troubleshooting-Assistant](https://github.com/OviyaaSM/Network-Troubleshooting-Assistant)
