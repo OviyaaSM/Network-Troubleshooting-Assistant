@@ -84,8 +84,9 @@ export async function healthCheckHandler(req, res) {
     timestamp: new Date().toISOString(),
     service: 'Automated Network Troubleshooting Assistant Backend',
     version: '1.0.0',
-    environment: process.env.NODE_ENV || 'development',
-    serverless: Boolean(process.env.VERCEL)
+    platform: 'Render Web Service',
+    environment: process.env.NODE_ENV || 'production',
+    serverless: false
   });
 }
 

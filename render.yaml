@@ -1,16 +1,20 @@
 services:
-  # Frontend Static Site on Render
+  # Backend Persistent Web Service on Render
   - type: web
-    name: network-troubleshooting-assistant-frontend
-    env: static
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
-    routes:
-      # SPA rewrite rule for React client-side routing
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    name: network-troubleshooting-assistant-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
     envVars:
-      - key: VITE_API_URL
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
         sync: false
-        # Point to deployed Vercel backend URL (e.g. https://network-troubleshooting-assistant.vercel.app)
+        # Example: mongodb+srv://<username>:<password>@cluster0.mongodb.net/network_assistant?retryWrites=true&w=majority
+      - key: FRONTEND_URL
+        value: https://network-troubleshooting-assistant-frontend.vercel.app

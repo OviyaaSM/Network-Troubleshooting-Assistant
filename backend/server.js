@@ -97,10 +97,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start Server if invoked directly
-if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
+// Start Server for Render Persistent Web Service
+if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
-    console.log(`[Server] Automated Network Troubleshooting Assistant running on http://localhost:${PORT}`);
+    console.log(`[Server] Automated Network Troubleshooting Assistant running on port ${PORT}`);
   });
 }
 

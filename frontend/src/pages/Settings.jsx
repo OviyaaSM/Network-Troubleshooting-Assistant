@@ -47,7 +47,7 @@ export function Settings({ isSimulated, setIsSimulated }) {
       {/* Backend Health & Deployment Info */}
       <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 border-b border-slate-100 pb-2">
-          Backend Runtime Status (Vercel Serverless / Node.js)
+          Backend Runtime Status (Render Web Service / Node.js + Express)
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
@@ -62,14 +62,14 @@ export function Settings({ isSimulated, setIsSimulated }) {
           <div className="p-3 bg-slate-50 rounded border border-slate-200">
             <span className="text-[10px] text-slate-400 font-semibold uppercase block">Target Architecture</span>
             <div className="font-bold text-slate-800 mt-1">
-              {health?.serverless ? 'Vercel Serverless Function' : 'Express Node.js Container'}
+              Render Web Service (Persistent Node.js)
             </div>
           </div>
 
           <div className="p-3 bg-slate-50 rounded border border-slate-200">
             <span className="text-[10px] text-slate-400 font-semibold uppercase block">Frontend Deployment</span>
             <div className="font-bold text-slate-800 mt-1">
-              Render Static Site (Vite React)
+              Vercel Production (React + Vite)
             </div>
           </div>
         </div>

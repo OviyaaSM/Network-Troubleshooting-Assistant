@@ -3,8 +3,8 @@
 > An intelligent, web-based network diagnostic and troubleshooting platform integrating empirical Computer Networks protocols with Formal Languages & Automata Theory (FLAT).
 
 [![CI/CD Tests](https://img.shields.io/badge/tests-31%20passed-success)](https://github.com/OviyaaSM/Network-Troubleshooting-Assistant)
-[![Frontend: Render](https://img.shields.io/badge/Frontend-Render-46E3B7?logo=render&logoColor=white)](https://network-troubleshooting-assistant.onrender.com)
-[![Backend: Vercel](https://img.shields.io/badge/Backend-Vercel-000000?logo=vercel&logoColor=white)](https://network-troubleshooting-assistant.vercel.app)
+[![Frontend: Vercel](https://img.shields.io/badge/Frontend-Vercel-000000?logo=vercel&logoColor=white)](https://frontend-one-sandy-68.vercel.app)
+[![Backend: Render](https://img.shields.io/badge/Backend-Render-46E3B7?logo=render&logoColor=white)](https://network-troubleshooting-assistant-backend.onrender.com)
 [![FLAT Automata](https://img.shields.io/badge/FLAT-DFA%20%2B%20Regex-blue)](#10-flat-concepts-used)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -25,7 +25,15 @@ Beyond standard network diagnostics, the system bridges empirical network engine
 
 ---
 
-## 3. Problem Statement
+## 3. Deployment Architecture Overview
+The production deployment arrangement is:
+- **Frontend:** **Vercel** (React 18 + Vite Single Page Application with SPA routing rewrites)
+- **Backend:** **Render Web Service** (Persistent Node.js + Express server)
+- **Database:** **MongoDB Atlas** (Cloud Mongoose connection with resilient in-memory fallback)
+
+---
+
+## 4. Problem Statement
 Troubleshooting modern computer network outages is challenging due to:
 - **Disparate Diagnostic Tools:** Users must manually juggle `ping`, `nslookup`, `netstat`, `traceroute`, and `curl`, which lack unified correlation.
 - **Cryptic Error Messages:** Operating system socket errors (e.g. `getaddrinfo ENOTFOUND`, `ECONNREFUSED`, `ETIMEDOUT`) are opaque to non-specialists.
@@ -34,17 +42,17 @@ Troubleshooting modern computer network outages is challenging due to:
 
 ---
 
-## 4. Objectives
+## 5. Objectives
 - **Automate Multi-Layer Diagnostics:** Orchestrate sequential checks across Gateway, DNS, IP routing, TCP transport, and HTTP application layers in one click.
 - **Implement FLAT Academic Principles:** Demonstrate real-world applications of Regular Expressions and Finite State Machines for network state classification.
 - **Interactive Conversational Troubleshooting:** Provide an intelligent, two-panel troubleshooting assistant combining natural language queries with a live network topology visualization.
 - **Provide Safe Simulation Scenarios:** Allow users to simulate reproducible failure states (e.g., DNS NXDOMAIN, port drop, gateway disconnect) without disrupting production hardware.
 - **Deliver a Minimal, Professional Interface:** Adhere to a NetBrain-inspired UI characterized by high information density, clean typography, compact status indicators, and responsive layouts.
-- **Full Cloud Deployment:** Deploy a production-ready system utilizing **Render** for the static React frontend and **Vercel** for the serverless Node.js backend with MongoDB persistence.
+- **Full Cloud Deployment:** Deploy a production-ready system utilizing **Vercel** for the React frontend and **Render** for the persistent Node.js Web Service backend with MongoDB Atlas persistence.
 
 ---
 
-## 5. Features
+## 6. Features
 - **One-Click Diagnostic Pipeline:** Probes Gateway connectivity, DNS resolution latency, ICMP/TCP host reachability, TCP 3-way handshake, HTTP status codes, and route hop availability.
 - **FLAT DFA State Machine Engine:** Parses diagnostic symbols ($w \in \Sigma^*$) through a formal 5-tuple DFA ($M = (Q, \Sigma, \delta, q_0, F)$) with real-time transition tracing.
 - **Regular Expression Error Classifier:** Compiles robust Type-3 regular expression patterns to classify raw network error strings into standardized codes with confidence scoring.
@@ -56,42 +64,48 @@ Troubleshooting modern computer network outages is challenging due to:
 
 ---
 
-## 6. Technology Stack
+## 7. Technology Stack
 
 ### Frontend
+- **Hosting Platform:** **Vercel**
 - **Framework:** React 18 + Vite
 - **Styling:** Tailwind CSS (NetBrain minimal light aesthetic)
 - **Icons:** Lucide React
 - **Network Graph:** Custom SVG-based Interactive Layered Topology
 
 ### Backend
+- **Hosting Platform:** **Render** (Persistent Web Service)
 - **Runtime:** Node.js (v20+ / v24)
-- **Web Framework:** Express.js (REST API & Vercel Serverless adaptation)
-- **Database:** MongoDB with Mongoose ODM + Resilient In-Memory Fallback
+- **Web Framework:** Express.js (Persistent HTTP REST API)
+- **Database:** MongoDB Atlas with Mongoose ODM + Resilient In-Memory Fallback
 - **Networking Modules:** `net`, `dns`, `http`, `https`, `os`
-- **Security:** SSRF Validation Middleware, CORS, Helmet
+- **Security:** SSRF Validation Middleware, CORS, Rate Limiting
 
 ### Testing & Tooling
 - **Unit & Integration Testing:** Vitest, Supertest, Testing Library, JSDOM
 - **Automated Verification:** Puppeteer Headless Browser
-- **Deployment Platforms:** Render (Frontend Static Site) + Vercel (Backend Serverless)
+- **Deployment Configuration:** `frontend/vercel.json` + `render.yaml`
 
 ---
 
-## 7. System Architecture
+## 8. System Architecture
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        CLIENT LAYER (Render SPA)                       │
+│                      FRONTEND LAYER (Vercel Production)                │
+│    https://frontend-one-sandy-68.vercel.app                           │
 │  React 18 + Vite | Tailwind CSS | Topology Canvas | Assistant Console  │
+│  SPA Rewrite Routing via frontend/vercel.json                          │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │ HTTPS / REST API
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│                      API GATEWAY & SECURITY LAYER                      │
-│        Vercel Serverless Function / Express.js (Node.js Engine)        │
-│          ├── CORS Configuration (Render Allowed Origin)                │
+│                   BACKEND LAYER (Render Web Service)                   │
+│    https://network-troubleshooting-assistant-backend.onrender.com      │
+│        Persistent Node.js + Express Server (Port: process.env.PORT)    │
+│          ├── CORS Configuration (Allows *.vercel.app & Custom Domain)  │
 │          ├── SSRF Validation & Private IP Filter                       │
+│          ├── Health Check Endpoint (/api/health)                       │
 │          └── Rate Limiting & Timeout Guard                             │
 └──────────────┬─────────────────────────────┬───────────────────────────┘
                │                             │
@@ -117,7 +131,7 @@ Troubleshooting modern computer network outages is challenging due to:
 
 ---
 
-## 8. Complete Project Workflow
+## 9. Complete Project Workflow
 
 1. **Target Specification:** The user enters an IPv4 address or FQDN hostname (e.g. `google.com`) and target port (e.g. `80`, `443`, `22`).
 2. **SSRF Validation:** The input passes through `ssrfProtection.js`. Malformed inputs, internal loopbacks (`127.0.0.1`), and cloud metadata (`169.254.169.254`) are blocked in remote mode.
@@ -127,7 +141,7 @@ Troubleshooting modern computer network outages is challenging due to:
    - **Step 3 (Reachability):** Dispatches TCP-SYN/echo probes to verify destination routing.
    - **Step 4 (TCP Handshake):** Establishes a 3-way handshake on the target port via `net.Socket`.
    - **Step 5 (HTTP):** Sends an HTTP HEAD/GET request to evaluate status codes and TLS headers.
-   - **Step 6 (Route Analysis):** Inspects routing hops, clearly flagging serverless restrictions.
+   - **Step 6 (Route Analysis):** Inspects routing hops, clearly flagging environment restrictions.
 4. **Symbolic Encoding:** Test outcomes are mapped to formal symbols:
    - Gateway OK $\to G$, Gateway Down $\to g$
    - DNS OK $\to D$, DNS Down $\to d$
@@ -140,7 +154,7 @@ Troubleshooting modern computer network outages is challenging due to:
 
 ---
 
-## 9. Computer Networks Concepts Used
+## 10. Computer Networks Concepts Used
 
 | Concept | OSI Layer | Implementation in Project |
 | :--- | :--- | :--- |
@@ -149,13 +163,13 @@ Troubleshooting modern computer network outages is challenging due to:
 | **DNS Resolution** | Layer 7 (Application) | True DNS queries using `dns.promises.lookup`; measures latency, extracts IPv4 addresses, and handles `NXDOMAIN` / `SERVFAIL`. |
 | **TCP 3-Way Handshake** | Layer 4 (Transport) | Establishes genuine SYN $\to$ SYN-ACK $\to$ ACK handshakes using `net.Socket`; detects `ECONNREFUSED` (RST) and `ETIMEDOUT`. |
 | **HTTP/HTTPS Protocols** | Layer 7 (Application) | Evaluates status codes (2xx/3xx/4xx/5xx), round-trip response times, and SSL/TLS certificate validity. |
-| **ICMP & Route Reachability** | Layer 3 (Network) | Echo probe abstraction layer; detects unprivileged serverless container constraints and falls back to TCP-SYN reflection. |
-| **Routing & Hop Analysis** | Layer 3 (Network) | Route analysis layer with clear capability annotations distinguishing serverless environments from local agents. |
+| **ICMP & Route Reachability** | Layer 3 (Network) | Echo probe abstraction layer; detects unprivileged container constraints and falls back to TCP-SYN reflection. |
+| **Routing & Hop Analysis** | Layer 3 (Network) | Route analysis layer with clear capability annotations distinguishing cloud environments from local agents. |
 | **Network Star/Tree Topology** | Layer 2/3 (Data Link/Net) | Hierarchical representation of WAN edge, router, distribution switch, servers, and workstations. |
 
 ---
 
-## 10. FLAT Concepts Used
+## 11. FLAT Concepts Used
 
 The system integrates Formal Languages and Automata Theory to build a robust diagnostic classifier:
 
@@ -172,7 +186,7 @@ The system integrates Formal Languages and Automata Theory to build a robust dia
 
 ---
 
-## 11. Regular Expression Implementation
+## 12. Regular Expression Implementation
 
 Module: `backend/flat-engine/errorPatternMatcher.js`
 
@@ -218,11 +232,11 @@ export const ERROR_PATTERNS = [
 
 ---
 
-## 12. DFA Implementation and Transition Table
+## 13. DFA Implementation and Transition Table
 
 Module: `backend/flat-engine/networkDFA.js`
 
-### 12.1 Formal 5-Tuple Definition
+### 13.1 Formal 5-Tuple Definition
 - **Set of States $Q$:**
   $$Q = \{ q_0, q_G, q_g, q_{GD}, q_{Gd}, q_{GDS}, q_{GDs}, q_{GDST}, q_{GDSt}, q_{trap} \}$$
 - **Input Alphabet $\Sigma$:**
@@ -232,7 +246,7 @@ Module: `backend/flat-engine/networkDFA.js`
 - **Set of Final / Diagnostic States $F$:**
   $$F = \{ q_g, q_{Gd}, q_{GDs}, q_{GDSt}, q_{GDST} \}$$
 
-### 12.2 State Transition Table $\delta(q, \sigma)$
+### 13.2 State Transition Table $\delta(q, \sigma)$
 
 | Current State $q$ | $G$ | $g$ | $D$ | $d$ | $S$ | $s$ | $T$ | $t$ | Diagnostic Outcome |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
@@ -249,7 +263,7 @@ Module: `backend/flat-engine/networkDFA.js`
 
 ---
 
-## 13. Backend API Documentation
+## 14. Backend API Documentation
 
 ### Diagnostics Endpoints
 - `POST /api/diagnostics/run`
@@ -277,7 +291,7 @@ Module: `backend/flat-engine/networkDFA.js`
 - `GET /api/network/status`
   - **Response (200):** System health metrics, success rate, and recent issues.
 - `GET /api/health`
-  - **Response (200):** Server status, version, and serverless runtime mode.
+  - **Response (200):** Server status, version, platform (`Render Web Service`), and health state.
 
 ### FLAT Engine Endpoints
 - `GET /api/flat/dfa-spec`
@@ -291,7 +305,7 @@ Module: `backend/flat-engine/networkDFA.js`
 
 ---
 
-## 14. MongoDB Database Design
+## 15. MongoDB Database Design
 
 ### `DiagnosticReport` Schema
 ```javascript
@@ -333,16 +347,16 @@ Module: `backend/flat-engine/networkDFA.js`
 
 ---
 
-## 15. Project Folder Structure
+## 16. Project Folder Structure
 
 ```
 Network-Troubleshooting-Assistant/
-├── frontend/                     # React 18 + Vite Frontend Application
+├── frontend/                     # React 18 + Vite Frontend Application (Deployed on Vercel)
 │   ├── public/                   # Static public assets
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── Layout/           # Sidebar.jsx, Header.jsx
-│   │   │   └── Topology/         # TopologyGraph.jsx (SVG-based topology)
+│   │   │   └── Topology/         # TopologyGraph.jsx (SVG-based layered topology)
 │   │   ├── pages/
 │   │   │   ├── Dashboard.jsx     # NetBrain-inspired operations dashboard
 │   │   │   ├── NetworkDiagnosis.jsx # Test configuration, probe matrix & results
@@ -359,15 +373,15 @@ Network-Troubleshooting-Assistant/
 │   │   ├── App.jsx               # Root navigation router
 │   │   ├── index.css             # Tailwind base and custom scrollbars
 │   │   └── main.jsx              # Application bootstrap
+│   ├── .env.example              # Frontend environment variables
 │   ├── index.html                # HTML entry point
 │   ├── package.json              # Frontend dependencies and test scripts
 │   ├── postcss.config.js         # PostCSS configuration
 │   ├── tailwind.config.js        # Tailwind styling configuration
-│   └── vite.config.js            # Vite build and proxy configuration
+│   ├── vercel.json               # Vercel SPA rewrite & framework configuration
+│   └── vite.config.js            # Vite build configuration
 │
-├── backend/                      # Node.js + Express + Vercel Serverless Backend
-│   ├── api/
-│   │   └── index.js              # Vercel Serverless Function entry point
+├── backend/                      # Node.js + Express Persistent Server (Deployed on Render)
 │   ├── config/
 │   │   └── db.js                 # MongoDB connection with resilient fallback
 │   ├── controllers/
@@ -385,7 +399,7 @@ Network-Troubleshooting-Assistant/
 │   │   ├── tcpCheck.js           # Real TCP socket handshake via net.Socket
 │   │   └── tracerouteCheck.js    # Route hop analytics & capability check
 │   ├── flat-engine/
-│   │   ├── errorPatternMatcher.js # Regular expression network error classifier
+│   │   ├── errorPatternMatcher.js# Regular expression network error classifier
 │   │   ├── networkDFA.js         # Formal 5-tuple Deterministic Finite Automaton
 │   │   └── troubleshootingEngine.js # Knowledge-base rule synthesizer
 │   ├── middleware/
@@ -403,8 +417,7 @@ Network-Troubleshooting-Assistant/
 │   │   ├── flatEngine.test.js    # DFA and Regex pattern unit tests
 │   │   └── networking.test.js    # SSRF and troubleshooting rule tests
 │   ├── package.json              # Backend dependencies and scripts
-│   ├── server.js                 # Express server configuration
-│   └── vercel.json               # Vercel Serverless deployment descriptor
+│   └── server.js                 # Persistent Express server (Render entry point)
 │
 ├── docs/
 │   └── screenshots/              # Real application capture screenshots
@@ -418,7 +431,7 @@ Network-Troubleshooting-Assistant/
 │
 ├── scripts/
 │   └── capture-screenshots.mjs   # Headless Chrome automated capture script
-├── render.yaml                   # Render Static Site build & SPA rewrite config
+├── render.yaml                   # Render Persistent Web Service Blueprint
 ├── .env.example                  # Environment variable reference
 ├── .gitignore                    # Clean Git ignore file
 └── README.md                     # Comprehensive project documentation
@@ -426,7 +439,7 @@ Network-Troubleshooting-Assistant/
 
 ---
 
-## 16. Installation and Setup Instructions
+## 17. Installation and Setup Instructions
 
 ### Prerequisites
 - **Node.js:** v18.0.0 or higher (v20+ recommended)
@@ -452,40 +465,40 @@ npm install
 
 ---
 
-## 17. Environment Variables
+## 18. Environment Variables
 
 Create `.env` inside the `backend` directory (refer to `.env.example`):
 
 ```env
-# Server Port
-PORT=5000
+# Server Port (assigned by Render in production)
+PORT=10000
 
 # Environment Mode
-NODE_ENV=development
+NODE_ENV=production
 
-# MongoDB Connection String
+# MongoDB Connection String (MongoDB Atlas)
 # (Optional: If omitted, backend automatically runs in resilient in-memory mode)
 MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/network_assistant?retryWrites=true&w=majority
 
-# Allowed Frontend URL for CORS
-FRONTEND_URL=http://localhost:5173
+# Allowed Frontend URL for CORS (Vercel Frontend)
+FRONTEND_URL=https://frontend-one-sandy-68.vercel.app
 ```
 
-For the frontend (in `frontend/.env`):
+For the frontend on **Vercel** (configured in Vercel Project Settings):
 ```env
-# Backend API URL (Omit in local development to use Vite's built-in proxy)
-VITE_API_URL=http://localhost:5000
+# Backend API URL (Points to Render Web Service)
+VITE_API_URL=https://network-troubleshooting-assistant-backend.onrender.com
 ```
 
 ---
 
-## 18. Running the Application Locally
+## 19. Running the Application Locally
 
 ### Start Backend Server
 ```bash
 cd backend
 npm start
-# Server listens on http://localhost:5000
+# Server listens on port 5000 (or PORT in .env)
 ```
 
 ### Start Frontend Development Server
@@ -499,7 +512,7 @@ Open your browser at `http://localhost:5173`.
 
 ---
 
-## 19. Testing Instructions
+## 20. Testing Instructions
 
 All tests are implemented using **Vitest** and **Supertest** covering Computer Networks, FLAT engines, and API routes.
 
@@ -519,92 +532,80 @@ npm test
 
 ---
 
-## 20. Deployment Instructions
+## 21. Deployment Instructions
 
-### Frontend Deployment: Render
-1. Create a new **Static Site** on [Render](https://render.com).
-2. Connect the GitHub repository: `https://github.com/OviyaaSM/Network-Troubleshooting-Assistant`.
-3. Configure the build parameters:
-   - **Root Directory:** *(leave blank or project root)*
-   - **Build Command:** `cd frontend && npm install && npm run build`
-   - **Publish Directory:** `frontend/dist`
-4. Add Environment Variable:
-   - `VITE_API_URL`: Your live Vercel backend URL (e.g. `https://network-troubleshooting-assistant.vercel.app`).
-5. Under **Redirects/Rewrites**, configure SPA fallback:
-   - **Source:** `/*`
-   - **Destination:** `/index.html`
-   - **Action:** `Rewrite`
-6. Click **Deploy**.
-
-### Backend Deployment: Vercel
-1. Install the Vercel CLI or import the repository in the [Vercel Dashboard](https://vercel.com).
+### Frontend Deployment: VERCEL
+1. In the [Vercel Dashboard](https://vercel.com), click **Add New Project** and import:
+   `https://github.com/OviyaaSM/Network-Troubleshooting-Assistant`
 2. Configure project settings:
+   - **Root Directory:** `frontend`
+   - **Framework Preset:** `Vite`
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+3. Add Environment Variable:
+   - `VITE_API_URL`: `https://network-troubleshooting-assistant-backend.onrender.com`
+4. The file `frontend/vercel.json` automatically manages Single Page Application (SPA) rewrite rules so direct navigations and refreshes on `/diagnostics`, `/assistant`, `/topology`, `/history`, and `/flat` work without 404 errors.
+5. Click **Deploy**.
+
+### Backend Deployment: RENDER
+1. In the [Render Dashboard](https://render.com), click **New +** and select **Web Service** (or use Blueprints with `render.yaml`).
+2. Connect the GitHub repository: `https://github.com/OviyaaSM/Network-Troubleshooting-Assistant`.
+3. Configure the Web Service settings:
+   - **Name:** `network-troubleshooting-assistant-backend`
    - **Root Directory:** `backend`
-   - **Framework Preset:** `Other`
-3. Add Environment Variables in Vercel:
+   - **Runtime:** `Node`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+   - **Health Check Path:** `/api/health`
+4. Add Environment Variables:
    - `NODE_ENV`: `production`
-   - `MONGODB_URI`: Your MongoDB Atlas connection URI.
-   - `FRONTEND_URL`: Your deployed Render URL (e.g. `https://network-troubleshooting-assistant.onrender.com`).
-4. Vercel automatically detects `vercel.json` and routes all API traffic to `api/index.js`.
-5. Deploy and verify the health endpoint: `https://<your-vercel-app>.vercel.app/api/health`.
+   - `PORT`: `10000`
+   - `MONGODB_URI`: Your MongoDB Atlas connection string.
+   - `FRONTEND_URL`: `https://frontend-one-sandy-68.vercel.app`
+5. Click **Create Web Service**. Render provides persistent socket execution and health-check monitoring.
 
 ---
 
-## 21. Live Frontend URL
-- **Production URL:** [https://network-troubleshooting-assistant.onrender.com](https://network-troubleshooting-assistant.onrender.com)
+## 22. Live Frontend URL (VERCEL)
+- **Production URL:** [https://frontend-one-sandy-68.vercel.app](https://frontend-one-sandy-68.vercel.app)
 
 ---
 
-## 22. Live Backend URL
-- **Production API URL:** [https://network-troubleshooting-assistant.vercel.app](https://network-troubleshooting-assistant.vercel.app)
-- **Health Verification:** [https://network-troubleshooting-assistant.vercel.app/api/health](https://network-troubleshooting-assistant.vercel.app/api/health)
+## 23. Live Backend URL (RENDER)
+- **Production API URL:** [https://network-troubleshooting-assistant-backend.onrender.com](https://network-troubleshooting-assistant-backend.onrender.com)
+- **Health Verification:** [https://network-troubleshooting-assistant-backend.onrender.com/api/health](https://network-troubleshooting-assistant-backend.onrender.com/api/health)
 
 ---
 
-## 23. Application Screenshots
+## 24. Application Screenshots
 
-### 23.1 Operations Dashboard
+### 24.1 Operations Dashboard
 *Real-time overview of network health, test metrics, failure distribution, and audit activity.*
 ![Dashboard](docs/screenshots/dashboard.png)
 
-### 23.2 Network Diagnosis Page
+### 24.2 Network Diagnosis Page
 *Target configuration bar, protocol selection, and probe matrix.*
 ![Network Diagnosis](docs/screenshots/network-diagnosis.png)
 
-### 23.3 Diagnostic Results & Troubleshooting Synthesis
+### 24.3 Diagnostic Results & Troubleshooting Synthesis
 *Empirical evidence table, suspected root cause, remediation steps, and DFA state output.*
 ![Diagnostic Results](docs/screenshots/diagnostic-results.png)
 
-### 23.4 Troubleshooting Assistant & Live Topology
+### 24.4 Troubleshooting Assistant & Live Topology
 *Two-panel interface: conversational assistant on the left, interactive network topology on the right.*
 ![Troubleshooting Assistant](docs/screenshots/troubleshooting-assistant.png)
 
-### 23.5 Network Topology Map
+### 24.5 Network Topology Map
 *Layered hierarchical topology with node state controls and simulated fault injection.*
 ![Network Topology](docs/screenshots/network-topology.png)
 
-### 23.6 Diagnostic History Archive
+### 24.6 Diagnostic History Archive
 *Audit log table of prior tests with details modal.*
 ![Diagnostic History](docs/screenshots/diagnostic-history.png)
 
-### 23.7 FLAT Engine: Regex Classifier & DFA Simulator
+### 24.7 FLAT Engine: Regex Classifier & DFA Simulator
 *Interactive DFA state machine simulator, transition table, and Type-3 regex pattern tester.*
 ![FLAT DFA Visualization](docs/screenshots/flat-dfa-visualization.png)
-
----
-
-## 24. Limitations and Future Enhancements
-
-### Current Limitations
-- **Serverless ICMP Restrictions:** Standard serverless sandboxes (Vercel, AWS Lambda) drop raw ICMP echo requests due to unprivileged Linux container user namespaces. The system compensates via TCP-SYN probe reflection.
-- **Traceroute in Cloud Functions:** Kernel TTL socket manipulation requires raw socket permissions (`CAP_NET_RAW`), which are restricted in public serverless runtimes.
-- **SSRF Restrictions on Private Ranges:** Internal RFC 1918 addresses are blocked in remote mode to protect serverless hosting infrastructure.
-
-### Future Enhancements
-- **Agentic Auto-Remediation:** Introduce an optional local execution daemon capable of automatically flushing DNS caches, renewing DHCP leases, or re-enabling network adapters with administrative consent.
-- **Pushdown Automata (PDA) for Layer 7 Protocols:** Extend formal automata modeling to Pushdown Automata (Context-Free Grammars) to validate balanced HTTP chunked transfers and TLS handshake records.
-- **SNMP / LLDP Automated Device Discovery:** Support real-time Layer 2/3 neighbor discovery via SNMP v3 and LLDP polling when running in a local enterprise network.
-- **WebSocket Streaming:** Enable live diagnostic progress updates over WebSockets for long-running route traces.
 
 ---
 
