@@ -1,3 +1,5 @@
+
+VERCEL LINK: https://network-troubleshooting-assistant-kappa.vercel.app/  
 # Automated Network Troubleshooting Assistant
 
 > An intelligent, web-based network diagnostic and troubleshooting platform integrating empirical Computer Networks protocols with Formal Languages & Automata Theory (FLAT).
